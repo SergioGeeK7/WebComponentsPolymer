@@ -1,0 +1,45 @@
+<link rel="import" href="www/lib/polymer/polymer.html">
+
+<dom-module id="contact-listining">
+
+    <style>
+        .listing-wrapper {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .listing-wrapper img {
+            border-radius: 50%;
+            margin-right: 40px;
+        }
+        
+        h3 {
+            margin: 0 40px 0 0;
+            line-height: 80px;
+        }
+        
+        .listing-wrapper span {
+            line-height: 80px;
+        }
+
+    </style>
+    <template>
+        <div class="listing-wrapper">
+            <img src="{{img}}">
+            <h3>{{name}} form here</h3>
+            <span>{{email}}</span>
+        </div>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'contact-listining',
+        properties: {
+            name: String,
+            email: String,
+            img: String
+        }
+    });
+
+</script>

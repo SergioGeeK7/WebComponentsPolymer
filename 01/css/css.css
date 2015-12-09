@@ -1,0 +1,13 @@
+google-map {
+    height: 400px;
+    width: 400px;
+}
+
+/* How to overwrite the elements inside */
+
+my-element-tag h1.my-element-tag {
+    color: red;
+}
+aside {
+    width: 70%;
+}

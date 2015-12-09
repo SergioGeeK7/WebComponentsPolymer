@@ -1,0 +1,71 @@
+<link rel="import" href="../www/lib/polymer/polymer.html">
+
+
+<dom-module id="object-binding">
+
+    <style>
+
+
+    </style>
+
+    <template>
+        <div>
+            {{person.name}}
+        </div>
+        <button on-click="k">Change</button>
+
+        <h5>{{firstWinner}}</h5>
+        <h5>{{winners.0}}</h5>
+        <h4>1st Place : {{computeUser(winners.*,0)}}</h4>
+
+    </template>
+
+</dom-module>
+
+<!-- a.unshift("winners","k") -->
+<script>
+    Polymer({
+        is: "object-binding",
+        properties: {
+            person: {
+                type: Object,
+                value: {
+                    name: "Sergio",
+                    age: 22
+                },
+                //notify: true
+            },
+            winners: {
+                value: ["Sergio", "Jhoana", "Veronica"],
+                type: []
+            }
+        },
+        created: function() {
+            console.log(this.localName + '#' + this.id + ' was created');
+        },
+        attributeChanged: function(name, type) {
+            console.log(this.localName + '#' + this.id + ' attribute ' + name +
+                ' was changed to ' + this.getAttribute(name));
+        },
+        k: function() {
+            this.person.name = "Juliana";
+            this.set("person.name", "Juliana");
+            this.set("person.age", 4);
+        },
+        observers: [
+            "ageHasChanged(person.age)",
+            "winnerHasChanged(winners.*,0)"
+        ],
+        ageHasChanged: function(age) {
+            alert(age);
+        },
+        winnerHasChanged: function(changedRecord, index) {
+            this.firstWinner = changedRecord.base[index];
+        },
+        computeUser: function(changeRecord, index) {
+            return changeRecord.base[index];
+        },
+
+    });
+
+</script>

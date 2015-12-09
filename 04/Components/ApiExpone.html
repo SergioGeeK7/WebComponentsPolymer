@@ -1,0 +1,39 @@
+<link rel="import" href="../www/lib/polymer/polymer.html">
+
+
+<dom-module id="api-expone">
+
+    <style>
+
+
+    </style>
+
+    <template>
+        <div>
+
+            <h2 on-click="k">Api hi</h2>
+            <h4>  <span>{{lol}} </span>  </h4>
+
+            <content>
+
+            </content>
+        </div>
+    </template>
+
+</dom-module>
+
+
+<script>
+    Polymer({
+        is: "api-expone",
+        show: function(message) {
+            //alert(message);
+        },
+        lol: "oe",
+        k: function() {
+            alert("you have done click on me");
+        },
+        //listeners:{}
+    });
+
+</script>

@@ -1,0 +1,33 @@
+<script>
+    var myBehaviors = myBehaviors || {};
+    myBehaviors.PressedBehavior = {
+        properties: {
+            type: String,
+            default: false,
+            readOnly: true
+        },
+        created: function() {
+            console.log("an object with myBehaviors is alive !")
+        },
+        listeners: {
+            mousedown: "_addPressed",
+            mouseup: "_removePressed"
+        },
+        _addPressed: function() {
+            this.classList.add("pressed");
+            this._onPressStart();
+        },
+        _removePressed: function() {
+            this.classList.remove("pressed");
+            this._onPressEnd();
+        },
+        _onPressStart: function() {
+            // Abstract method
+        },
+        _onPressEnd: function() {
+            // Abstract method
+        }
+
+    }
+
+</script>

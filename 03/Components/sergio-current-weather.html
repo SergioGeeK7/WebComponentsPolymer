@@ -1,0 +1,82 @@
+<link rel="import" href="../www/lib/iron-ajax/iron-ajax.html">
+<link rel="import" href="../www/lib/iron-image/iron-image.html">
+<link rel="import" href="../www/lib/paper-styles/paper-styles.html">
+
+<link rel="import" href="./sergio-weather.html">
+
+
+<dom-module id="sergio-current-weather">
+
+
+    <style is="custom-style">
+        :host {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            text-align: right;
+        }
+        
+        span {
+            display: block;
+        }
+        
+        .city {
+            font-size: 5em;
+            font-weight: bold;
+            color: white;
+            font-family: "Roboto", "Noto";
+            text-shadow: 0px 0px 5px black;
+        }
+        
+        .desc,
+        .humidity {
+            font-size: 2em;
+            color: white;
+            font-family: "Roboto", "Noto";
+            text-shadow: 0px 0px 5px black;
+        }
+        
+        .temp {
+            font-size: 7em;
+            font-weight: bold;
+            color: white;
+            font-family: "Roboto", "Noto";
+            text-shadow: 0px 0px 5px black;
+        }
+
+    </style>
+
+    <template>
+
+        <span class="humidity">{{humidity}}</span>
+        <span class="temp">{{temp}}</span>
+        <span class="desc">{{desc}}</span>
+        <span class="city">{{city}}</span>
+
+    </template>
+</dom-module>
+
+
+
+
+<script>
+    Polymer({
+        is: "sergio-current-weather",
+        properties: {
+            humidity: Number,
+            temp: Number,
+            desc: String,
+            city: String,
+            name: {
+                //observer:_Name
+                //notify:true
+                //readOnly
+                //reflectToAttribute
+            }
+        },
+        ready: function() {
+            console.log("Inside of current weather");
+        }
+    });
+
+</script>

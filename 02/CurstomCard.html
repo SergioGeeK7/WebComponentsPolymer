@@ -1,0 +1,30 @@
+<dom-module id="custom-card">
+    <link rel="stylesheet" href="CurstomCard.css">
+    <template>
+        <div>
+            <span>{{nombre}}</span>
+            <span>{{edad}}</span>
+        </div>
+    </template>
+
+</dom-module>
+
+
+<script>
+    Polymer({
+        is: "custom-card",
+        properties: {
+            nombre: String,
+            edad: String
+        },
+        ready: function() {
+            console.log("Custom card ready !");
+            this.nombre = "Sergio";
+            this.mostrarConsola("Oe");
+        },
+        mostrarConsola: function(message) {
+            console.log(message);
+        }
+    });
+
+</script>

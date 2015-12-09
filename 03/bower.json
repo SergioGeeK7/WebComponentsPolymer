@@ -1,0 +1,25 @@
+{
+  "name": "03",
+  "version": "0.0.0",
+  "main": "index.html",
+  "authors": [
+    "sergio"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#1.2.0",
+    "iron-ajax": "PolymerElements/iron-ajax#1.0.0",
+    "iron-image": "PolymerElements/iron-image#1.0.0",
+    "neon-animation": "PolymerElements/neon-animation#1.0.0",
+    "paper-header-panel": "PolymerElements/paper-header-panel#1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#1.0.0"
+  }
+}

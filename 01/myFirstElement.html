@@ -1,0 +1,54 @@
+<link rel="import" href="/www/lib/polymer/polymer.html">
+
+<dom-module id="my-element-tag">
+
+    <style>
+        h1 {
+            color: aquamarine;
+        }
+
+    </style>
+    <template>
+        <h1>hellow this is a webcomponent using polymer and you are {{firstName}} {{lastName}}</h1>
+
+        <br>
+
+
+
+        <input type="text" value="{{inputValue::input}}">
+        <input type="text" value="{{firstName::input}}">
+        <h1>this is a computed value from another function {{fullName}}</h1>
+        <h3> Input value is  {{inputValue}}</h3>
+        <h3> The first name is  {{firstName}}</h3>
+        <input type="text" value="{{age}}">
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'my-element-tag',
+        age: 22,
+        properties: {
+            firstName: String,
+            lastName: {
+                type: String,
+                value: "Arbolelito Default"
+            },
+            fullName: {
+                type: String,
+                computed: 'computedFullName(firstName,lastName)'
+            },
+            age: {
+                type: Number,
+                value: 22
+            }
+        },
+        computedFullName: function(firstName, lastName) {
+            return firstName + " " + lastName;
+        }
+
+
+
+    });
+
+</script>

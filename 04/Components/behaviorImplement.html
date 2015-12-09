@@ -1,0 +1,50 @@
+<link rel="import" href="../www/lib/polymer/polymer.html">
+<link rel="import" href="./behavior.html">
+
+
+
+<dom-module id="behavior-implement">
+
+
+    <style>
+        :host {
+            width: 200px;
+            height: 200px;
+            border-radius: 8px;
+            border: 1px solid black;
+        }
+        
+        :host(.pressed) {
+            color: aqua;
+            border: 1px solid aqua;
+        }
+
+    </style>
+
+    <template>
+        <h1>oe</h1>
+    </template>
+
+</dom-module>
+
+
+
+<script>
+    Polymer({
+        is: "behavior-implement",
+        behaviors: [myBehaviors.PressedBehavior],
+        _onPressEnd: function() {
+            //alert("Aw come back !");
+        },
+        listeners: {
+            "dblclick": "_dblclick"
+        },
+        _dblclick: function() {
+            alert("yes !");
+        },
+        _click: function() {
+            alert(":click");
+        }
+    });
+
+</script>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="www/lib/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="www/lib/polymer/polymer.html">
+    <!--<link rel="import" href="CurstomCard.html">-->
+    <link rel="import" href="www/lib/paper-toolbar/paper-toolbar.html">
+    <link rel="import" href="www/lib/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="www/lib/iron-icons/iron-icons.html">
+    <link rel="import" href="www/lib/paper-drawer-panel/paper-drawer-panel.html">
+    <link rel="import" href="www/lib/paper-fab/paper-fab.html">
+    <link rel="import" href="www/lib/paper-styles/paper-styles.html">
+
+
+    <style is="custom-style">
+        body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        paper-toolbar.main {
+            background: var (--paper-blue-300)
+        }
+        
+        paper-toolbar.drawer {
+            background: var (--paper-blue-900)
+        }
+        
+        paper-fab.add {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+
+
+
+    <paper-drawer-panel>
+
+        <div drawer>
+            <paper-toolbar class="drawer">
+                <span>Opciones</span>
+            </paper-toolbar>
+        </div>
+
+        <div main>
+            <paper-toolbar class="main">
+                <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                <span title>Mi tiempo</span>
+                <paper-icon-button icon="refresh"></paper-icon-button>
+            </paper-toolbar>
+
+
+            <paper-fab icon="add" class="add"></paper-fab>
+
+        </div>
+
+    </paper-drawer-panel>
+    <!--  <custom-card edad="21"></custom-card> -->
+</body>
+
+</html>

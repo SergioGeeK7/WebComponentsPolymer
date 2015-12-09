@@ -1,0 +1,25 @@
+{
+  "name": "WebComponents",
+  "version": "0.0.0",
+  "description": "My First step WebComponents",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#1.2.0",
+    "google-map": "GoogleWebComponents/google-map#~1.1.7",
+    "modernizr": "~3.2.0",
+    "iron-collapse": "PolymerElements/iron-collapse#~1.0.4",
+    "paper-spinner": "PolymerElements/paper-spinner#~1.0.4",
+    "paper-tooltip": "PolymerElements/paper-tooltip#~1.1.1",
+    "iron-icons": "PolymerElements/iron-icons#~1.0.5",
+    "paper-checkbox": "PolymerElements/paper-checkbox#~1.0.16",
+    "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#~1.0.6"
+  }
+}

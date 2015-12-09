@@ -1,0 +1,66 @@
+<link rel="import" href="www/lib/polymer/polymer.html">
+<link rel="import" href="contact-listining.html">
+
+<dom-module id="contact-list">
+
+    <style>
+        ul {
+            list-style: none;
+        }
+        
+        li + li {
+            border-top: solid 1px #666;
+        }
+
+    </style>
+    <template id="kk">
+        <ul>
+            <template is="dom-repeat" items="{{contacts}}">
+                <li>
+                    <contact-listining name="{{item.name}}" email="{{item.email}}" img="{{item.img}}"></contact-listining>
+                </li>
+            </template>
+        </ul>
+
+        <h1>{{myVar}}</h1>
+
+    </template>
+
+
+
+
+</dom-module>
+
+<script>
+    //document.querySelector("kk").myVar = "Hellow";
+
+    Polymer({
+
+        is: 'contact-list',
+        ready: function() {
+
+            this.contacts = [{
+                name: "Sergio",
+                email: "sergiogeek7@gmail.com",
+                img: "http://webopa.azurewebsites.net/img/Bunny.png"
+            }, {
+                name: "Juan",
+                email: "juan@gmail.com",
+                img: "http://webopa.azurewebsites.net/img/Cat.png"
+            }, {
+                name: "Jhoana",
+                email: "Jhoana@gmail.com",
+                img: "http://webopa.azurewebsites.net/img/Deer.png"
+            }, {
+                name: "Marcela",
+                email: "Marcela@gmail.com",
+                img: "http://webopa.azurewebsites.net/img/Fox.png"
+            }]
+        }
+
+
+
+
+    });
+
+</script>
