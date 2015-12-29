@@ -1,0 +1,47 @@
+<link rel="import" href="../../www/lib/polymer/polymer.html">
+<link rel="import" href="../../www/lib/paper-input/paper-input.html">
+
+
+
+<dom-module id="opa-input">
+
+    <template>
+        <style></style>
+
+        <paper-input id="main" name="[[name]]" label="[[label]]" auto-validate autocomplete="cc-name" type="[[type]]" placeholder="[[placeholder]]">
+
+        </paper-input>
+
+    </template>
+
+</dom-module>
+
+
+<script>
+    Polymer({
+        is: 'opa-input',
+        properties: {
+            name: String,
+            type: {
+                type: String,
+                value: "text"
+            },
+            required: {
+                type: String,
+                value: "false"
+            },
+            placeholder: String,
+            label:String
+        },
+        ready: function() {
+            if (this.required === "true") {
+                this.$.main.setAttribute("required", true);
+            }
+        },
+        created: function() {
+            //alert("oe created");
+        },
+        //behaviors: [Polymer.IronFormElementBehavior]
+    });
+
+</script>

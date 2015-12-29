@@ -1,0 +1,38 @@
+<link rel="import" href="../../www/lib/polymer/polymer.html">
+<link rel="import" href="../../www/lib/paper-checkbox/paper-checkbox.html">
+
+
+
+<dom-module id="opa-checkbox">
+
+    <template>
+        <style></style>
+        <paper-checkbox auto-validate name="[[name]]" id="main">[[label]]</paper-checkbox>
+
+    </template>
+
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'opa-checkbox',
+        properties: {
+            name: String,
+            required: {
+                value: "false",
+                type: String
+            },
+            label: String
+        },
+        ready: function() {
+            if (this.required === "true") {
+                this.$.main.setAttribute("required", true);
+            }
+        },
+        created: function() {
+            //alert("oe created");
+        },
+        //behaviors: [Polymer.IronFormElementBehavior]
+    });
+
+</script>

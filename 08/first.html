@@ -1,0 +1,105 @@
+<dom-module id="first-p">
+
+
+
+
+
+    <template>
+
+        <style>
+            :host {
+                --card-color: orange;
+                --text-color: green;
+            }
+            /* Si existe toma el primero si no toma el segundo */
+            
+            :host {
+                color: var(--custom-text-color, --text-color);
+            }
+            
+            .container {
+                background: var(--custom-card-color, --card-color);
+            }
+
+        </style>
+
+
+
+
+        <input type="text" value="{{name::keyup}}">
+
+        <div class="container" id="container">
+            <h1>Hello, [[name]] </h1>
+        </div>
+
+
+        <template is="dom-repeat" items="{{foods}}">
+
+            <div>
+                <button on-click="add">+</button>
+                <span>{{item.qty}} - {{item.name}}  (#{{index}})</span>
+            </div>
+
+        </template>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: "first-p",
+            properties: {
+                position: {
+                    type: String,
+                    reflectToAttribute: true,
+                    value: "Yeah !",
+                    notify: true,
+                },
+                name: {
+                    type: String,
+                    observer: "_colorChanged"
+                }
+            },
+            attributeChanged: function(name, oldValue, newValue) {
+                console.log("%s was changes to %s from %s", name, newValue, oldValue);
+            },
+            ready: function() {
+                this.addEventListener("position-changed", function(e) {
+                    console.log(e.detail.value);
+                });
+                this.foods = [{
+                    name: "Pizza",
+                    "qty": 0
+                }, {
+                    name: "Vandeja Paisa",
+                    "qty": 0
+                }, {
+                    name: "Arroz con pollo",
+                    "qty": 0
+                }, ];
+            },
+            created: function() {
+                this.addEventListener("click", function() {
+                    console.log("Click");
+                });
+            },
+            _colorChanged: function(newVal, oldVal) {
+                this.$.container.style.backgroundColor = newVal;
+                ["Sergio", "Mariana", "Monica", "Jhoana"].indexOf(newVal) > -1 && this.fire("toKill", {
+                    target: newVal
+                });
+            },
+            listeners: {
+                "container.mousedown": "_mausedown"
+            },
+            _mausedown: function() {
+                console.log("mause down");
+            },
+            add: function(e) {
+                e.model.set("item.qty", e.model.item.qty + 1);
+            }
+        })
+
+    </script>
+
+
+</dom-module>

@@ -1,0 +1,135 @@
+<link rel="import" href="../www/lib/polymer/polymer.html">
+<link rel="import" href="../www/lib/paper-button/paper-button.html">
+<link rel="import" href="../www/lib/iron-form/iron-form.html">
+<link rel="import" href="../www/lib/iron-ajax/iron-ajax.html">
+<link rel="import" href="../www/lib/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../www/lib/paper-listbox/paper-listbox.html">
+<link rel="import" href="../www/lib/paper-item/paper-item.html">
+
+
+
+<link rel="import" href="opa-form-components/opa-input.html">
+<link rel="import" href="opa-form-components/opa-checkbox.html">
+
+
+
+<script src="../structure.js"></script>
+
+
+
+<dom-module id="opa-form">
+
+    <template>
+        <style>
+            paper-button {
+                background-color: #4285f4;
+                color: #fff;
+                margin-top: 50px;
+                width: 100%;
+                text-transform: capitalize;
+            }
+            
+            opa-checkbox {
+                display: block;
+                margin: 3px;
+            }
+
+        </style>
+
+        <form is="iron-form" id="form" method="post" action="/checkout" iron-form-submit="_handleFormSubmit">
+
+
+
+            <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
+
+                <template is="dom-if" if="[[element.isInput]]">
+                    <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]"></opa-input>
+                </template>
+
+                <template is="dom-if" if="[[element.isCheckbox]]">
+                    <opa-checkbox name="[[element.name]]" label="[[element.label]]" required="[[element.require]]"></opa-checkbox>
+                </template>
+
+                <template is="dom-if" if="[[element.isSelect]]">
+
+                    <iron-ajax auto url="[[element.fill]]" handle-as="json" on-response="_fillSelect" title="[[indexElement]]"></iron-ajax>
+                    <paper-dropdown-menu label="[[element.label]]" name="[[element.name]]">
+                        <paper-listbox class="dropdown-content">
+                            <template is="dom-repeat" items="{{element.data}}" as="select" index-as="indexSelect">
+                                <paper-item value="{{select.key}}">{{select.value}}</paper-item>
+                            </template>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                </template>
+
+            </template>
+
+
+
+
+
+
+            <!-- VALIDAR CON EL NAME PARA MOSTRAR EL MENSAJE DE ERROR -->
+            <!-- HACER OTRO IF PARA EL TIPO NUMBER Y ESPEFICIFAR EL MAX Y MIN -->
+            <!-- 
+            <opa-input name="name" required="false"></opa-input>
+            <opa-input name="age" type="number" required="true"></opa-input>
+            <opa-checkbox name="notify" label="Notificacones"></opa-checkbox>
+            -->
+
+            <paper-button on-click="_submit">Enviar</paper-button>
+        </form>
+
+
+    </template>
+
+</dom-module>
+
+
+<!-- this.push('employees', { first: 'Jack', last: 'Aubrey' }); -->
+<!-- model.set('item.ordered', model.item.ordered+1); -->
+<!--
+fill: ""
+label: "Nombre"
+len: 15
+lostFocus: ""
+name: "name"
+require: 1
+type: "string"
+-->
+
+
+<script>
+    Polymer({
+        is: 'opa-form',
+        listeners: {
+            "form.iron-form-presubmit": '_handleFormSubmit'
+        },
+        ready: function() {
+            this.data = data.map(function(item) {
+
+                item.isInput = item.type === "text" || item.type === "number";
+                item.isSelect = item.type === "select";
+                item.isCheckbox = item.type === "bit";
+                return item;
+            });
+        },
+        _submit: function() {
+            if (!this.$.form.validate())
+                return alert("ta malo");
+            this.$.form.submit();
+        },
+        _handleFormSubmit: function(e) {
+
+            e.preventDefault();
+            console.log(this.$.form.serialize());
+        },
+        _fillSelect: function(data) {
+
+            console.log(data.detail.response);
+            this.set("data." + data.model.indexElement + ".data", data.detail.response);
+        }
+
+    });
+
+</script>
