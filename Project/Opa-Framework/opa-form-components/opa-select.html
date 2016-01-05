@@ -1,0 +1,53 @@
+<link rel="import" href="../../www/lib/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../www/lib/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../www/lib/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../www/lib/paper-item/paper-item.html">
+
+
+<dom-module id="opa-select">
+    <template>
+        <style></style>
+       <!-- on-response="_fillSelect" -->
+        <iron-ajax auto url="[[fill]]" handle-as="json" 
+        last-response="{{data}}" params='{{params}}'></iron-ajax>
+        <paper-dropdown-menu label="[[label]]" name="[[name]]" id="main" value="{{selected}}" selected="{{selectedId}}" >
+            <paper-listbox class="dropdown-content" selected="{{selectedId}}">
+                <template is="dom-repeat" items="{{data}}" as="select" index-as="indexSelect">
+                    <paper-item value="{{select.key}}">{{select.value}}</paper-item>
+                </template>
+            </paper-listbox>
+        </paper-dropdown-menu>
+    </template>
+</dom-module>
+
+
+<script>
+    //data.detail.response
+    Polymer({
+        is: 'opa-select',
+        properties: {
+            name: String,
+            fill: String,
+            required: {
+                type: String,
+                value: "false"
+            },
+            placeholder: String,
+            label: String,
+            selected:{
+                type:String,
+                notify:true,
+            },
+            whorequire:[],
+            params:Object
+        },
+        ready: function() {
+            if (this.required === "true") {
+                this.$.main.setAttribute("required", true);
+            }
+            
+        }
+       
+    });
+
+</script>

@@ -221,6 +221,20 @@ Custom property | Description | Default
       behaviors: [
         Polymer.PaperCheckedElementBehavior
       ],
+        
+      ready:function (){
+          
+          
+          /**
+         * Fired when the checked changes due to user interaction.
+         *
+         * @event change
+         */
+
+        this.addEventListener("iron-change",function (e,r){
+            this.value = this.checked;
+        });
+      },
 
       hostAttributes: {
         role: 'checkbox',

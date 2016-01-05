@@ -2,13 +2,16 @@
 <link rel="import" href="../../www/lib/paper-input/paper-input.html">
 
 
-
 <dom-module id="opa-input">
 
     <template>
         <style></style>
 
-        <paper-input id="main" name="[[name]]" label="[[label]]" auto-validate autocomplete="cc-name" type="[[type]]" placeholder="[[placeholder]]">
+       <!-- prevent-invalid-input  allowedPattern-->
+       
+        <paper-input id="main" name="[[name]]" label="[[label]]" auto-validate autocomplete="cc-name" type="[[type]]" placeholder="[[placeholder]]" 
+        max="[[max]]" min="[[min]]" maxlength=[[len]] pattern="[[pattern]]" 
+        error-message="[[errormessage]]">
 
         </paper-input>
 

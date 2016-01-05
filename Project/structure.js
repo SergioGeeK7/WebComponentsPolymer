@@ -7,8 +7,10 @@ var data = [
         name: "name",
         fill: "",
         whoRequire: [],
-        lostFocus: ""
-},
+        lostFocus: "",
+        errorMessage: "La longitud maxima del Nombre es 15 caracterés",
+        test: ""
+        },
     {
         label: "Apellido",
         type: "text",
@@ -17,45 +19,72 @@ var data = [
         name: "lastname",
         fill: "",
         whoRequire: [],
-        lostFocus: ""
+        lostFocus: "",
+        errorMessage: "La longitud maxima del apellido es 20 caracterés",
+        test: ""
 },
     {
         label: "Edad",
         type: "number",
         max: 100,
         min: 1,
-        require: "false",
+        require: "true",
         name: "age",
         fill: "",
         whoRequire: [],
-        lostFocus: ""
+        lostFocus: "",
+        errorMessage: "Debe ingresar una edad entre 1 y 100",
+        test: ""
 }, {
         label: "Notificacones",
         type: "bit",
-        require: "true",
+        require: "false",
         name: "notify",
         fill: "",
         whoRequire: [],
-        lostFocus: ""
+        lostFocus: "",
+        test: ""
 },
     {
         label: "Pais",
         type: "select",
         len: 20,
         require: "true",
-        name: "country",
+        name: "codPais",
         fill: "http://localhost:4000/public/api/select/Country",
         whoRequire: [],
-        lostFocus: ""
+        lostFocus: "",
+        test: ""
 },
-  /*  {
+    {
+        label: "Ip",
+        type: "text",
+        require: "true",
+        name: "ip",
+        pattern: "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}",
+        errorMessage: "Debe ser una ip valida",
+        test: ""
+    },
+    {
         label: "Departamento",
         type: "select",
         len: 20,
         require: "true",
-        name: "department",
-        fill: "http://localhost:4000/select/Department",
-        whoRequire: ["country"],
-        lostFocus: ""
-}*/
+        name: "codDepartamento",
+        fill: "http://localhost:4000/public/api/select/Department",
+        whoRequire: ["codPais"],
+        lostFocus: "",
+        test: ""
+},
+{
+        label: "Ciudad",
+        type: "select",
+        len: 20,
+        require: "true",
+        name: "city",
+        fill: "http://localhost:4000/public/api/select/City",
+        whoRequire: ["codPais","codDepartamento"],
+        lostFocus: "",
+        test: ""
+}
 ];
