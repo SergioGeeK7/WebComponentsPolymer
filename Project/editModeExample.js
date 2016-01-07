@@ -1,0 +1,12 @@
+var dataEdit = 
+{
+    name: "Sergio",
+    lastname: "Arboleda",
+    age:22,
+    notify:true,
+    codPais:"249",
+    codDepartamento:"01",
+    city: "01001",
+    ip:"192.168.20.7",
+    id:7
+};

@@ -6,6 +6,7 @@
 <link rel="import" href="opa-form-components/opa-checkbox.html">
 <link rel="import" href="opa-form-components/opa-select.html">
 <script src="../structure.js"></script>
+<script src="../editModeExample.js"></script>
 
 
 <dom-module id="opa-form">
@@ -33,15 +34,15 @@
             <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
 
                  <template is="dom-if" if="[[element.isInput]]">
-                    <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]" max="[[element.max]]" min="[[element.min]]" pattern="[[element.pattern]]" errormessage="[[element.errorMessage]]" len="[[element.len]]"></opa-input>
+                    <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]" max="[[element.max]]" min="[[element.min]]" pattern="[[element.pattern]]" errormessage="[[element.errorMessage]]" len="[[element.len]]" id="[[element.name]]"></opa-input>
                 </template>
                 
                 <template is="dom-if" if="[[element.isCheckbox]]">
-                    <opa-checkbox name="[[element.name]]" label="[[element.label]]" required="[[element.require]]"></opa-checkbox>
+                    <opa-checkbox name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" id="[[element.name]]"></opa-checkbox>
                 </template>
 
                 <template is="dom-if" if="[[element.isSelect]]">
-                    <opa-select fill="[[element.fill]]" name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" selected="{{element.identity.value}}" paramss="[[computeUser(element.*)]]" whorequire="[[element.whoRequire]]">
+                    <opa-select fill="[[element.fill]]" name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" selected="{{element.identity.value}}" paramss="[[_onSelectChange(element.*)]]" whorequire="[[element.whoRequire]]" id="[[element.name]]">
                     </opa-select>
                 </template>
                
@@ -117,11 +118,13 @@ data.filter(function (item){ return item.whoRequire && item.whoRequire.length })
                     });
                 
             });
-            console.log(this.data);
-            
+             
             
         },
-        computeUser:function (hasChanged){
+        attached:function (){
+            this._fillForm(dataEdit);
+        },
+        _onSelectChange:function (hasChanged){
             
                   
             var elementChanged = hasChanged.base.name;
@@ -161,6 +164,14 @@ data.filter(function (item){ return item.whoRequire && item.whoRequire.length })
 
             e.preventDefault();
             console.log(this.$.form.serialize());
+        },  
+        _fillForm:function (data){
+            
+            for (var i in data){
+                if(i === "id")continue;
+                document.querySelector('#' + i).value =   data[i];
+                document.querySelector('#' + i).selectedId =   data[i];
+            }
         }
 
     });

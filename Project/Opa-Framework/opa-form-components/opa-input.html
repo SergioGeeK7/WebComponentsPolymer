@@ -11,7 +11,7 @@
        
         <paper-input id="main" name="[[name]]" label="[[label]]" auto-validate autocomplete="cc-name" type="[[type]]" placeholder="[[placeholder]]" 
         max="[[max]]" min="[[min]]" maxlength=[[len]] pattern="[[pattern]]" 
-        error-message="[[errormessage]]">
+        error-message="[[errormessage]]" value={{value}}>
 
         </paper-input>
 
@@ -34,7 +34,11 @@
                 value: "false"
             },
             placeholder: String,
-            label:String
+            label:String,
+            value:{
+                type:String,
+                notify:true
+            }
         },
         ready: function() {
             if (this.required === "true") {
