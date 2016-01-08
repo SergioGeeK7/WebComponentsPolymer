@@ -7,11 +7,9 @@
     <template>
         <style></style>
 
-       <!-- prevent-invalid-input  allowedPattern-->
-       
-        <paper-input id="main" name="[[name]]" label="[[label]]" auto-validate autocomplete="cc-name" type="[[type]]" placeholder="[[placeholder]]" 
-        max="[[max]]" min="[[min]]" maxlength=[[len]] pattern="[[pattern]]" 
-        error-message="[[errormessage]]" value={{value}}>
+        <!-- prevent-invalid-input  allowed-pattern-->
+
+        <paper-input id="main" name="[[name]]" label="[[label]]" auto-validate autocomplete="cc-name" type="[[type]]" placeholder="[[placeholder]]" max="[[max]]" min="[[min]]" maxlength=[[len]] pattern="[[pattern]]" error-message="[[errorMessage]]" value={{value}}>
 
         </paper-input>
 
@@ -34,16 +32,22 @@
                 value: "false"
             },
             placeholder: String,
-            label:String,
-            value:{
-                type:String,
-                notify:true
+            label: String,
+            value: {
+                type: String,
+                notify: true
+            },
+            errormessage: {
+                type: String,
             }
         },
         ready: function() {
             if (this.required === "true") {
                 this.$.main.setAttribute("required", true);
             }
+            
+            this.errorMessage =  this.errormessage || "Por favor complete este campo";
+            this.self = this.$.main;
         },
         created: function() {
             //alert("oe created");

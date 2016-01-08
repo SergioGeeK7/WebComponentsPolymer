@@ -24,7 +24,7 @@
             opa-checkbox {
                 display: block;
                 margin-top: 15px;
-                margin-bottom:15px;
+                margin-bottom: 15px;
             }
 
         </style>
@@ -33,19 +33,19 @@
 
             <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
 
-                 <template is="dom-if" if="[[element.isInput]]">
-                    <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]" max="[[element.max]]" min="[[element.min]]" pattern="[[element.pattern]]" errormessage="[[element.errorMessage]]" len="[[element.len]]" id="[[element.name]]"></opa-input>
+                <template is="dom-if" if="[[element.isInput]]">
+                    <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]" max="[[element.max]]" min="[[element.min]]" pattern="[[element.pattern]]" errormessage="[[element.errorMessage]]" len="[[element.len]]" id="[[element.name]]" class="opa-element"></opa-input>
                 </template>
-                
+
                 <template is="dom-if" if="[[element.isCheckbox]]">
-                    <opa-checkbox name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" id="[[element.name]]"></opa-checkbox>
+                    <opa-checkbox name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" id="[[element.name]]" class="opa-element"></opa-checkbox>
                 </template>
 
                 <template is="dom-if" if="[[element.isSelect]]">
-                    <opa-select fill="[[element.fill]]" name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" selected="{{element.identity.value}}" paramss="[[_onSelectChange(element.*)]]" whorequire="[[element.whoRequire]]" id="[[element.name]]">
+                    <opa-select fill="[[element.fill]]" name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" selected="{{element.identity.value}}" paramss="[[_onSelectChange(element.*)]]" whorequire="[[element.whoRequire]]" id="[[element.name]]" class="opa-element">
                     </opa-select>
                 </template>
-               
+
             </template>
 
 
@@ -65,24 +65,11 @@
 
 </dom-module>
 
-
 <!-- this.push('employees', { first: 'Jack', last: 'Aubrey' }); -->
 <!-- model.set('item.ordered', model.item.ordered+1); -->
 <!--
-fill: ""
-label: "Nombre"
-len: 15
-lostFocus: ""
-name: "name"
-require: 1
-type: "string"
 -->
 
-<!-- 
-
-data.filter(function (item){ return item.whoRequire && item.whoRequire.length })
-
--->
 
 <script>
     Polymer({
@@ -91,69 +78,76 @@ data.filter(function (item){ return item.whoRequire && item.whoRequire.length })
             "form.iron-form-presubmit": '_handleFormSubmit'
         },
         ready: function() {
-        
+
             // change to created event .... for performance
             this.data = data.map(function(item) {
 
-                item.isInput = item.type === "text" || item.type === "number";
+                item.isInput = ["text","number","password"].indexOf(item.type) > -1;
                 item.isSelect = item.type === "select";
                 item.isCheckbox = item.type === "bit";
+                
                 item.identity = {
-                    name:item.name,
+                    name: item.name,
                     value: void(0)
                 };
                 return item;
             });
-            
-            this.data.forEach(function (item,index,I){    
-                    if(typeof item.whoRequire === "undefined" || !item.whoRequire.length) 
-                        return;
-                    
-                    var requiredElements = I.filter(function (itemFilter){
-                        return item.whoRequire.indexOf(itemFilter.name) > -1;
-                    });
-                    
-                    item.whoRequire = requiredElements.map(function (required){
-                        return required.identity; 
-                    });
-                
+
+            this.data.forEach(function(item, index, I) {
+                if (typeof item.whoRequire === "undefined" || !item.whoRequire.length)
+                    return;
+
+                var requiredElements = I.filter(function(itemFilter) {
+                    return item.whoRequire.indexOf(itemFilter.name) > -1;
+                });
+
+                item.whoRequire = requiredElements.map(function(required) {
+                    return required.identity;
+                });
+
             });
-             
-            
         },
-        attached:function (){
-            this._fillForm(dataEdit);
+        attached: function() {
+
+            //this.dataFillForm = dataEdit;
+
+            var elements = this.querySelectorAll(".opa-element");
+            this.campos = [].reduce.call(elements, function(obj, element) {
+                obj[element.id] = element.self;
+                return obj;
+            }, {});
+            this._fillForm();
         },
-        _onSelectChange:function (hasChanged){
-            
-                  
+        _onSelectChange: function(hasChanged) {
+
+
             var elementChanged = hasChanged.base.name;
             var selects = [].slice.call(document.querySelectorAll("opa-select"));
-            
-            var selectRequired = selects.forEach(function (select){
-                
+
+            var selectRequired = selects.forEach(function(select) {
+
                 if (!select.whorequire || !select.whorequire.filter(filterByProperty.bind(hasChanged.base)).length)
                     return;
-                
-                var property = select.whorequire.reduce(function (obj,item){
+
+                var property = select.whorequire.reduce(function(obj, item) {
                     obj[item.name] = item.value;
                     return obj;
-                 },{});
-               
-                select.selectedId = null;
+                }, {});
+
+                //select.selectedId = null;
                 select.params = property;
             });
-            
-            function filterByProperty (item){
+
+            function filterByProperty(item) {
                 return item.name === this.name;
             }
-            
+
         },
-        ageHasChanged:function (item){
+        ageHasChanged: function(item) {
             console.log(item);
         },
         observers: [
-           // "ageHasChanged(data.*)",
+            // "ageHasChanged(data.*)",
         ],
         _submit: function() {
             if (!this.$.form.validate())
@@ -164,13 +158,15 @@ data.filter(function (item){ return item.whoRequire && item.whoRequire.length })
 
             e.preventDefault();
             console.log(this.$.form.serialize());
-        },  
-        _fillForm:function (data){
-            
-            for (var i in data){
-                if(i === "id")continue;
-                document.querySelector('#' + i).value =   data[i];
-                document.querySelector('#' + i).selectedId =   data[i];
+        },
+        _fillForm: function() {
+
+            for (var i in this.dataFillForm) {
+                if (i === "id") continue;
+                this.campos[i].value = this.dataFillForm[i];
+                this.campos[i].selected = this.dataFillForm[i];
+                this.campos[i].checked = this.dataFillForm[i];
+                this.campos[i].setValue && this.campos[i].setValue(this.dataFillForm[i]);
             }
         }
 

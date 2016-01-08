@@ -2,6 +2,7 @@ var dataEdit =
 {
     name: "Sergio",
     lastname: "Arboleda",
+    password:"no es 1234",
     age:22,
     notify:true,
     codPais:"249",

@@ -7,7 +7,7 @@
 
     <template>
         <style></style>
-        <paper-checkbox auto-validate name="[[name]]" id="main">[[label]]</paper-checkbox>
+        <paper-checkbox auto-validate name="[[name]]" id="main" checked={{checked}}>[[label]]</paper-checkbox>
 
     </template>
 
@@ -22,12 +22,17 @@
                 value: "false",
                 type: String
             },
-            label: String
+            label: String,
+            checked:{
+                type:Boolean,
+                notify:true
+            }
         },
         ready: function() {
             if (this.required === "true") {
                 this.$.main.setAttribute("required", true);
             }
+            this.self = this.$.main;
         },
         created: function() {
             //alert("oe created");

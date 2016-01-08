@@ -10,9 +10,9 @@
        <!-- on-response="_fillSelect" -->
         <iron-ajax auto url="[[fill]]" handle-as="json" 
         last-response="{{data}}" params='{{params}}'></iron-ajax>
-        <paper-dropdown-menu label="[[label]]" name="[[name]]" id="main" value="{{selected}}" selected="{{selectedId}}" >
-            <paper-listbox class="dropdown-content" selected="{{selectedId}}">
-                <template is="dom-repeat" items="{{data}}" as="select" index-as="indexSelect">
+        <paper-dropdown-menu label="[[label]]" name="[[name]]"  value="{{selected}}" selected="{{selectedId}}" id="main">
+            <paper-listbox class="dropdown-content" selected="{{selectedId}}" attr-for-selected="value" id="option">
+                <template is="dom-repeat" items="{{data}}" as="select">
                     <paper-item value="{{select.key}}">{{select.value}}</paper-item>
                 </template>
             </paper-listbox>
@@ -46,6 +46,12 @@
                 this.$.main.setAttribute("required", true);
             }
             
+            
+            var option = this.$.option;
+            this.self = this.$.main;
+            this.self.setValue = function (val){
+                option.selected = val;
+            };
         }
        
     });
