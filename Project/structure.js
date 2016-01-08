@@ -64,7 +64,7 @@ var data = [
         type: "text",
         require: "true",
         name: "ip",
-        pattern: "[0-9]{1,3}-[0-9]{1,3}-[0-9]{1,3}-[0-9]{1,3}",
+        pattern: "[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,4}",
         errorMessage: "Debe ser una ip valida",
     },
 ];
