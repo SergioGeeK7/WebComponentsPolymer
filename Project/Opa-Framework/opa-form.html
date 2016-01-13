@@ -5,8 +5,9 @@
 <link rel="import" href="opa-form-components/opa-input.html">
 <link rel="import" href="opa-form-components/opa-checkbox.html">
 <link rel="import" href="opa-form-components/opa-select.html">
+<link rel="import" href="opa-form-components/opa-button.html">
 <script src="../structure.js"></script>
-<script src="../editModeExample.js"></script>
+
 
 
 <dom-module id="opa-form">
@@ -14,11 +15,22 @@
     <template>
         <style>
             paper-button {
-                background-color: #4285f4;
                 color: #fff;
-                margin-top: 50px;
+                margin: 10px;
                 width: 100%;
                 text-transform: capitalize;
+            }
+            
+            paper-button.save {
+                background-color: #4285f4;
+            }
+            
+            paper-button.wipe {
+                background-color: rgba(17, 206, 46, 0.83);
+            }
+            
+            paper-button.delete {
+                background-color: rgba(36, 42, 37, 0.68);
             }
             
             opa-checkbox {
@@ -26,10 +38,19 @@
                 margin-top: 15px;
                 margin-bottom: 15px;
             }
+            
+            .botonera {
+                width: 100%;
+            }
+            
+            paper-button[disabled],
+            paper-button[toggles][active] {
+                opacity: 0.6;
+            }
 
         </style>
 
-        <form is="iron-form" id="form" method="post" action="/checkout" iron-form-submit="_handleFormSubmit">
+        <form is="iron-form" id="form" action="[[action]]" method="delete">
 
             <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
 
@@ -48,18 +69,27 @@
 
             </template>
 
+            <div>
 
-            <!-- VALIDAR CON EL NAME PARA MOSTRAR EL MENSAJE DE ERROR -->
-            <!-- HACER OTRO IF PARA EL TIPO NUMBER Y ESPEFICIFAR EL MAX Y MIN -->
-            <!-- 
-            <opa-input name="name" required="false"></opa-input>
-            <opa-input name="age" type="number" required="true"></opa-input>
-            <opa-checkbox name="notify" label="Notificacones"></opa-checkbox>
-            -->
+                <div class="botonera">
 
-            <paper-button on-click="_submit">Enviar</paper-button>
+                    <paper-button class="save" on-click="_save">
+                        Guardar
+                    </paper-button>
+
+                    <paper-button class="wipe" on-click="wipe">
+                        <span hidden$="{{botonera.states.create}}">Cancelar</span>
+                        <span hidden$="{{!botonera.states.create}}">Limpiar</span>
+                    </paper-button>
+
+                    <paper-button class="delete" disabled$="{{!botonera.states.edit}}" on-click="_delete">
+                        Eliminar
+                    </paper-button>
+
+                </div>
+
+            </div>
         </form>
-
 
     </template>
 
@@ -77,15 +107,18 @@
         listeners: {
             "form.iron-form-presubmit": '_handleFormSubmit'
         },
+        properties: {
+            method:String,
+            action:String
+        },
         ready: function() {
 
-            // change to created event .... for performance
             this.data = data.map(function(item) {
 
-                item.isInput = ["text","number","password"].indexOf(item.type) > -1;
+                item.isInput = ["text", "number", "password"].indexOf(item.type) > -1;
                 item.isSelect = item.type === "select";
                 item.isCheckbox = item.type === "bit";
-                
+
                 item.identity = {
                     name: item.name,
                     value: void(0)
@@ -104,8 +137,30 @@
                 item.whoRequire = requiredElements.map(function(required) {
                     return required.identity;
                 });
-
             });
+
+            var self = this;
+
+            this.botonera = {
+                states: {
+                    edit: false,
+                    create: true
+                },
+                wipe: function() {
+                    self.wipe();
+                },
+                setEditMode: function(id) {
+                    self.set("botonera.states.edit", true);
+                    self.set("botonera.states.create", false);
+                    this.id = id;
+                },
+                setCreateMode: function() {
+                    self.set("botonera.states.create", true);
+                    self.set("botonera.states.edit", false);
+                    this.id = null;
+                    //self.set("botonera.id",null);
+                }
+            };
         },
         attached: function() {
 
@@ -116,7 +171,18 @@
                 obj[element.id] = element.self;
                 return obj;
             }, {});
-            this._fillForm();
+
+        },
+        wipe: function() {
+
+            for (var i in this.campos) {
+
+                this.campos[i].value = null;
+                this.campos[i].checked = null;
+                this.campos[i].setValue && this.campos[i].setValue(null);
+                this.campos[i].invalid = false;
+            }
+            this.botonera.setCreateMode();
         },
         _onSelectChange: function(hasChanged) {
 
@@ -151,25 +217,45 @@
         ],
         _submit: function() {
             if (!this.$.form.validate())
-                return alert("ta malo");
+                return;
+            console.log(this.$.form.request.method);
             this.$.form.submit();
+        },
+        _save :function (){
+          this.$.form.request.method = this.botonera.states.edit ? 'put' : 'post';
+          this._submit();
+        },
+        _delete:function (){
+          this.$.form.request.method = 'delete';
+          this._submit();
         },
         _handleFormSubmit: function(e) {
 
-            e.preventDefault();
+            //e.preventDefault();
             console.log(this.$.form.serialize());
         },
-        _fillForm: function() {
+        fill: function(dataFill) {
 
-            for (var i in this.dataFillForm) {
-                if (i === "id") continue;
-                this.campos[i].value = this.dataFillForm[i];
-                this.campos[i].selected = this.dataFillForm[i];
-                this.campos[i].checked = this.dataFillForm[i];
-                this.campos[i].setValue && this.campos[i].setValue(this.dataFillForm[i]);
+            var keys;
+
+            if (!dataFill || !(keys = Object.keys(dataFill)).length)
+                return;
+
+            this.botonera.setEditMode(dataFill.id);
+
+            for (var key = 0, length = keys.length; key < length; key++) {
+
+                if (keys[key] === "id") {
+                    continue;
+                }
+
+                this.campos[keys[key]].value = dataFill[keys[key]];
+                this.campos[keys[key]].selected = dataFill[keys[key]];
+                this.campos[keys[key]].checked = dataFill[keys[key]];
+                this.campos[keys[key]].setValue && this.campos[keys[key]].setValue(dataFill[keys[key]]);
             }
-        }
 
+        }
     });
 
 </script>

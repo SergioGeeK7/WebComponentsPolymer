@@ -17,9 +17,29 @@
 
 <body unresolved>
 
-    <opa-form json="">
+    <opa-form action="holakhace/desarrollando">
 
     </opa-form>
+    
+    
+    
+        <button onclick="fill()">Llenar</button>
+    
+    
+    
+    <script src="../editModeExample.js"></script>
+    <script>
+    
+    
+        
+        function fill(){
+            var form = document.querySelector("opa-form");
+            form.fill(dataEdit);
+        }
+        
+    
+    
+    </script>
     
 </body>
 
