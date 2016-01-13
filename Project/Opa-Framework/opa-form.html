@@ -50,7 +50,7 @@
 
         </style>
 
-        <form is="iron-form" id="form" action="[[action]]" method="delete">
+        <form is="iron-form" id="form" action="[[action]]" method="[[method]]">
 
             <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
 
@@ -218,21 +218,25 @@
         _submit: function() {
             if (!this.$.form.validate())
                 return;
-            console.log(this.$.form.request.method);
             this.$.form.submit();
         },
         _save :function (){
-          this.$.form.request.method = this.botonera.states.edit ? 'put' : 'post';
+          this.method = this.botonera.states.edit ? 'put' : 'post';
           this._submit();
         },
         _delete:function (){
-          this.$.form.request.method = 'delete';
-          this._submit();
+        
+          this.$.form.request.method = "delete";
+          this.$.form.request.url = this.action;
+          this.$.form.request.params = {id:this.botonera.id};
+          this.$.form.request.generateRequest();
         },
         _handleFormSubmit: function(e) {
 
             //e.preventDefault();
-            console.log(this.$.form.serialize());
+            //console.log(this.$.form.serialize());
+            this.botonera.setCreateMode();
+            this.wipe();
         },
         fill: function(dataFill) {
 
