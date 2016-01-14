@@ -49,6 +49,16 @@
             }
 
         </style>
+        
+        
+        
+        
+        
+
+       <iron-ajax auto url="[[structure]]" handle-as="json" 
+         params='{{params}}' on-response='handleResponse'>
+        </iron-ajax>
+        
 
         <form is="iron-form" id="form" action="[[action]]" method="[[method]]">
 
@@ -90,7 +100,7 @@
 
             </div>
         </form>
-
+        
     </template>
 
 </dom-module>
@@ -99,8 +109,6 @@
 <!-- model.set('item.ordered', model.item.ordered+1); -->
 <!--
 -->
-
-
 <script>
     Polymer({
         is: 'opa-form',
@@ -108,14 +116,20 @@
             "form.iron-form-presubmit": '_handleFormSubmit'
         },
         properties: {
-            method:String,
-            action:String
+            method: String,
+            action: String,
+            structure:String
         },
         ready: function() {
+         
+        },
+        handleResponse:function (e){
+          
+              var data = e.detail.response;
+            
+              this.data = data.map(function(item) {
 
-            this.data = data.map(function(item) {
-
-                item.isInput = ["text", "number", "password"].indexOf(item.type) > -1;
+                item.isInput = ["text", "number", "password","date"].indexOf(item.type) > -1;
                 item.isSelect = item.type === "select";
                 item.isCheckbox = item.type === "bit";
 
@@ -161,17 +175,19 @@
                     //self.set("botonera.id",null);
                 }
             };
+            
+         setTimeout(this.setElementsById.bind(this),1000);
         },
         attached: function() {
-
-            //this.dataFillForm = dataEdit;
-
+            
+        },
+        setElementsById : function (){
+            
             var elements = this.querySelectorAll(".opa-element");
             this.campos = [].reduce.call(elements, function(obj, element) {
                 obj[element.id] = element.self;
                 return obj;
-            }, {});
-
+            }, {});            
         },
         wipe: function() {
 
@@ -185,7 +201,6 @@
             this.botonera.setCreateMode();
         },
         _onSelectChange: function(hasChanged) {
-
 
             var elementChanged = hasChanged.base.name;
             var selects = [].slice.call(document.querySelectorAll("opa-select"));
@@ -220,16 +235,18 @@
                 return;
             this.$.form.submit();
         },
-        _save :function (){
-          this.method = this.botonera.states.edit ? 'put' : 'post';
-          this._submit();
+        _save: function() {
+            this.method = this.botonera.states.edit ? 'put' : 'post';
+            this._submit();
         },
-        _delete:function (){
-        
-          this.$.form.request.method = "delete";
-          this.$.form.request.url = this.action;
-          this.$.form.request.params = {id:this.botonera.id};
-          this.$.form.request.generateRequest();
+        _delete: function() {
+
+            this.$.form.request.method = "delete";
+            this.$.form.request.url = this.action;
+            this.$.form.request.params = {
+                id: this.botonera.id
+            };
+            this.$.form.request.generateRequest();
         },
         _handleFormSubmit: function(e) {
 

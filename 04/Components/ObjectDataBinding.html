@@ -17,6 +17,10 @@
         <h5>{{firstWinner}}</h5>
         <h5>{{winners.0}}</h5>
         <h4>1st Place : {{computeUser(winners.*,0)}}</h4>
+        
+        
+        
+        <h1 hidden$="{{botonera.estados.edit}}">Hola</h1>
 
     </template>
 
@@ -40,8 +44,17 @@
                 type: []
             }
         },
+        k:"LA LA LA LA",
         created: function() {
             console.log(this.localName + '#' + this.id + ' was created');
+            
+        },
+        ready:function (){
+          this.botonera = {
+              estados:{
+                  edit:false
+              }
+          };
         },
         attributeChanged: function(name, type) {
             console.log(this.localName + '#' + this.id + ' attribute ' + name +

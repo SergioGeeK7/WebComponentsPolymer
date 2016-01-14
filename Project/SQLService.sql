@@ -2,16 +2,19 @@ CREATE DATABASE OpaFramework
 GO
 Use OpaFramework
 GO
-CREATE TABLE Users
-(
-	IdUsers int identity not null primary key,
-	name varchar(255),
-	lastName varchar(255),
-	age smallint,
-	codpais char(3) ,
-	coddepartamento char(2) ,
-	codciudad char(5) 
+CREATE TABLE USERS (
+name varchar(255),
+lastname varchar(255),
+password varchar(255),
+age tinyint,
+notify bit,
+codPais char(3) ,
+codDepartamento char(2) ,
+codCiudad char(5) ,
+Ip	varchar(20)
 )
+
+
 
 --------------------------
 SELECT * INTO pais FROM coonfie.dbo.pais 
