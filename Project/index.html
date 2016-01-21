@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Web Components -->
     <script src="www/lib/webcomponentsjs/webcomponents-lite.min.js">
+
+
     </script>
     <!-- Imports will go here -->
-    <link rel="import" href="/Opa-Framework/opa-form.html">
+    <link rel="import" href="www/lib/Opa-Framework/opa-form.html">
 
 </head>
 
@@ -17,17 +19,30 @@
 
     <opa-form action="http://192.168.20.7:4000/404" structure="http://192.168.20.7:4000/public/api/opaframework">
     </opa-form>
-     
-   <button onclick="fill()">Llenar</button>
-    
+
+
+    <button onclick="fill()">Llenar</button>
+
     <script src="../editModeExample.js"></script>
-    <script>    
-        function fill(){
+    <script>
+        function fill() {
             var form = document.querySelector("opa-form");
             form.fill(dataEdit);
         }
+        
+        
+        document.querySelector("opa-form").addEventListener("onFormLoad",function (){
+            
+            this.campos["lastname"].addEventListener("click",function (){
+               
+                alert("click");
+                
+            });
+        });
+        
+        
     </script>
-    
+
 </body>
 
 </html>

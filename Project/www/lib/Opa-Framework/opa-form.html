@@ -1,7 +1,7 @@
-<link rel="import" href="../www/lib/polymer/polymer.html">
-<link rel="import" href="../www/lib/paper-button/paper-button.html">
-<link rel="import" href="../www/lib/iron-form/iron-form.html">
-<link rel="import" href="../www/lib/iron-ajax/iron-ajax.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="opa-form-components/opa-input.html">
 <link rel="import" href="opa-form-components/opa-checkbox.html">
 <link rel="import" href="opa-form-components/opa-select.html">
@@ -49,20 +49,13 @@
             }
 
         </style>
-        
-        
-        
-        
-        
 
-       <iron-ajax auto url="[[structure]]" handle-as="json" 
-         params='{{params}}' on-response='handleResponse'>
+        <iron-ajax auto url="[[structure]]" handle-as="json" params='{{params}}' on-response='handleResponse'>
         </iron-ajax>
-        
 
         <form is="iron-form" id="form" action="[[action]]" method="[[method]]">
 
-            <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
+       <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
 
                 <template is="dom-if" if="[[element.isInput]]">
                     <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]" max="[[element.max]]" min="[[element.min]]" pattern="[[element.pattern]]" errormessage="[[element.errorMessage]]" len="[[element.len]]" id="[[element.name]]" class="opa-element"></opa-input>
@@ -77,7 +70,10 @@
                     </opa-select>
                 </template>
 
-            </template>
+               
+           </template>
+           
+            
 
             <div>
 
@@ -100,7 +96,7 @@
 
             </div>
         </form>
-        
+
     </template>
 
 </dom-module>
@@ -118,18 +114,18 @@
         properties: {
             method: String,
             action: String,
-            structure:String
+            structure: String
         },
         ready: function() {
-         
-        },
-        handleResponse:function (e){
           
-              var data = e.detail.response;
-            
-              this.data = data.map(function(item) {
+        },
+        handleResponse: function(e) {
 
-                item.isInput = ["text", "number", "password","date"].indexOf(item.type) > -1;
+            var data = e.detail.response;
+
+            this.data = data.map(function(item) {
+
+                item.isInput = ["text", "number", "password", "date"].indexOf(item.type) > -1;
                 item.isSelect = item.type === "select";
                 item.isCheckbox = item.type === "bit";
 
@@ -175,19 +171,27 @@
                     //self.set("botonera.id",null);
                 }
             };
+
+            setTimeout(this.setElementsById.bind(this),1000);
             
-         setTimeout(this.setElementsById.bind(this),1000);
+            /*this.$.formDom.addEventListener("dom-change", function() {
+                this.setElementsById();
+                console.log("dom change");
+            }.bind(this));*/
+            
         },
         attached: function() {
-            
+  
         },
-        setElementsById : function (){
-            
+        setElementsById: function() {
+
             var elements = this.querySelectorAll(".opa-element");
             this.campos = [].reduce.call(elements, function(obj, element) {
                 obj[element.id] = element.self;
                 return obj;
-            }, {});            
+            }, {});
+            
+            this.fire("onFormLoad");
         },
         wipe: function() {
 
