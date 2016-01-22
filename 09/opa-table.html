@@ -1,0 +1,117 @@
+<link rel="import" href="www/lib/polymer/polymer.html">
+<link rel="import" href="www/lib/paper-datatable/paper-datatable.html">
+<link rel="import" href="www/lib/iron-ajax/iron-ajax.html">
+<!--<link rel="import" href="www/lib/paper-datatable/paper-datatable-column.html">-->
+<link rel="import" href="www/lib/paper-datatable/paper-datatable-card.html">
+
+
+<!-- Defines element markup -->
+<dom-module id="opa-table">
+
+
+    <style>
+
+
+    </style>
+
+    <template>
+
+        <iron-ajax auto url="http://192.168.20.7:4000/public/api/getAsociados" on-response="__onajaxresponse">
+
+        </iron-ajax>
+
+
+
+        <paper-datatable-card selectable data-source="{{datasource}}" id-property="nro" id="datatableCard"> 
+
+
+            <div toolbar-main>
+                <paper-input value="{{search}}" on-input="__search">
+                    <paper-icon-button icon="search" on-tap="__search"></paper-icon-button>
+            </div>
+
+
+            <paper-datatable selectable>
+
+                <template is="dom-repeat" items="{{headers}}">
+
+                    <paper-datatable-column header="{{item}}" property="{{item}}" sortable>
+                    </paper-datatable-column>
+
+                </template>
+
+            </paper-datatable>
+
+        </paper-datatable-card>
+
+
+
+
+
+    </template>
+
+    <!-- Registers custom element -->
+    <script>
+        Polymer({
+            is: 'opa-table',
+
+            // Fires when an instance of the element is created
+            created: function() {},
+
+            // Fires when the local DOM has been fully prepared
+            ready: function() {
+
+
+                var app = this;
+
+                this.datasource = {
+                    get: function(sort, page, pageSize) {
+                        
+                        var self = this;
+                        console.log(sort);
+                        return new Promise(function(resolve, reject) {
+                            var httpRequest = new XMLHttpRequest();
+                            httpRequest.onreadystatechange = function() {
+                                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                                    if (httpRequest.status === 200) {
+                                        var result = JSON.parse(httpRequest.responseText);
+                                        if(result[0][0] && result[0][0].pages){
+                                            self.length = result[0][0].pages;
+                                        }
+                                            
+                                        resolve(result[0]);
+                                    }
+                                }
+                            };
+                            httpRequest.open('GET', "http://192.168.20.7:4000/public/api/getAsociados?page=" + page + "&name="+app.search + "&size="+pageSize);
+                            httpRequest.send();
+                        });
+                    },
+                    set: function(id, property, value) {
+                        console.info("a save was triggered", value);
+                    },
+                    length: 100
+                };
+                
+            },
+
+            // Fires when the element was inserted into the document
+            attached: function() {},
+
+            // Fires when the element was removed from the document
+            detached: function() {},
+
+            // Fires when an attribute was added, removed, or updated
+            attributeChanged: function(name, type) {},
+            __onajaxresponse: function(e) {
+                var data = e.detail.response;
+                this.headers = Object.keys(data[0][0]);
+            },
+            __search:function (){
+                this.$.datatableCard.retrieveVisibleData();
+            }
+            
+        });
+
+    </script>
+</dom-module>
