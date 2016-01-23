@@ -6,9 +6,6 @@
 <link rel="import" href="opa-form-components/opa-checkbox.html">
 <link rel="import" href="opa-form-components/opa-select.html">
 <link rel="import" href="opa-form-components/opa-button.html">
-<script src="../structure.js"></script>
-
-
 
 <dom-module id="opa-form">
 
@@ -55,7 +52,7 @@
 
         <form is="iron-form" id="form" action="[[action]]" method="[[method]]">
 
-       <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement">
+            <template is="dom-repeat" items="{{data}}" as="element" index-as="indexElement" id="inputrepeat">
 
                 <template is="dom-if" if="[[element.isInput]]">
                     <opa-input name="[[element.name]]" required="[[element.require]]" placeholder="{{element.label}}" label="[[element.label]]" type="[[element.type]]" max="[[element.max]]" min="[[element.min]]" pattern="[[element.pattern]]" errormessage="[[element.errorMessage]]" len="[[element.len]]" id="[[element.name]]" class="opa-element"></opa-input>
@@ -70,10 +67,11 @@
                     </opa-select>
                 </template>
 
-               
-           </template>
-           
-            
+                <template is="dom-if" dom-change="onchange" on-dom-change="__lastElementDomChange" title="[[indexElement]]">
+                    <h1>Dom has changed</h1>
+                </template>
+
+            </template>
 
             <div>
 
@@ -103,7 +101,11 @@
 
 <!-- this.push('employees', { first: 'Jack', last: 'Aubrey' }); -->
 <!-- model.set('item.ordered', model.item.ordered+1); -->
-<!--
+<!--this.fire('dom-change'); 
+this._tryRenderChunk();
+polymer.html
+
+_render
 -->
 <script>
     Polymer({
@@ -117,7 +119,14 @@
             structure: String
         },
         ready: function() {
-          
+
+        },
+        __lastElementDomChange: function(e) {
+
+            var lastElement = e.model.indexElement === this.data.length - 1;
+            if (lastElement) {
+                this.setElementsById();
+            }
         },
         handleResponse: function(e) {
 
@@ -172,16 +181,10 @@
                 }
             };
 
-            setTimeout(this.setElementsById.bind(this),1000);
-            
-            /*this.$.formDom.addEventListener("dom-change", function() {
-                this.setElementsById();
-                console.log("dom change");
-            }.bind(this));*/
-            
+            //setTimeout(this.setElementsById.bind(this), 1000);
         },
         attached: function() {
-  
+
         },
         setElementsById: function() {
 
@@ -190,7 +193,7 @@
                 obj[element.id] = element.self;
                 return obj;
             }, {});
-            
+
             this.fire("onFormLoad");
         },
         wipe: function() {
@@ -207,25 +210,26 @@
         _onSelectChange: function(hasChanged) {
 
             var elementChanged = hasChanged.base.name;
-            var selects = [].slice.call(document.querySelectorAll("opa-select"));
+            var selects = [].slice.call(this.querySelectorAll("opa-select"));
 
-            var selectRequired = selects.forEach(function(select) {
+            selects.forEach(function(select) {
 
-                if (!select.whorequire || !select.whorequire.filter(filterByProperty.bind(hasChanged.base)).length)
+                var noRequired = !select.whorequire || !select.whorequire.some((item) => {
+                    item.name === elementChanged && typeof item.value !== "undefined"
+                });
+                if (noRequired)
                     return;
 
-                var property = select.whorequire.reduce(function(obj, item) {
+                var queryString = select.whorequire.reduce(function(obj, item) {
                     obj[item.name] = item.value;
                     return obj;
                 }, {});
 
-                //select.selectedId = null;
-                select.params = property;
-            });
+                // si hay dataedit no poner null
+                select.selectedId = null;
 
-            function filterByProperty(item) {
-                return item.name === this.name;
-            }
+                select.params = queryString;
+            });
 
         },
         ageHasChanged: function(item) {
@@ -251,6 +255,7 @@
                 id: this.botonera.id
             };
             this.$.form.request.generateRequest();
+            this.wipe();
         },
         _handleFormSubmit: function(e) {
 
@@ -262,6 +267,7 @@
         fill: function(dataFill) {
 
             var keys;
+            this.botonera.isFill = true;
 
             if (!dataFill || !(keys = Object.keys(dataFill)).length)
                 return;
@@ -280,6 +286,7 @@
                 this.campos[keys[key]].setValue && this.campos[keys[key]].setValue(dataFill[keys[key]]);
             }
 
+            this.botonera.isFill = false;
         }
     });
 
