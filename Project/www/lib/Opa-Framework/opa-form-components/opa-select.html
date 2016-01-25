@@ -8,10 +8,9 @@
 <dom-module id="opa-select">
     <template>
         <style></style>
-       <!-- on-response="_fillSelect" -->
-        <iron-ajax auto url="[[fill]]" handle-as="json" 
-        last-response="{{data}}" params='{{params}}'></iron-ajax>
-        <paper-dropdown-menu label="[[label]]" name="[[name]]"  value="{{selected}}" selected="{{selectedId}}" id="main">
+        <!-- on-response="_fillSelect" -->
+        <iron-ajax url="[[fill]]" handle-as="json" last-response="{{data}}" params='{{ajaxParams}}' id="ajax"></iron-ajax>
+        <paper-dropdown-menu label="[[label]]" name="[[name]]" value="{{selected}}" selected="{{selectedId}}" id="main">
             <paper-listbox class="dropdown-content" selected="{{selectedId}}" attr-for-selected="value" id="option">
                 <template is="dom-repeat" items="{{data}}" as="select">
                     <paper-item value="{{select.key}}">{{select.value}}</paper-item>
@@ -35,26 +34,42 @@
             },
             placeholder: String,
             label: String,
-            selected:{
-                type:String,
-                notify:true,
+            selected: {
+                type: String,
+                notify: true,
             },
-            whorequire:[],
-            params:Object
+            whorequire: [],
+            params: {
+                type: Object,
+                notify: true,
+                observer: "__paramsHasChanged"
+            }
+        },
+        __paramsHasChanged: function(newValue, oldValue) {
+            var isEmpty = Object
+                .keys(newValue)
+                .some(s => !newValue[s]);
+            if (isEmpty)
+                return;
+            this.ajaxParams = newValue;
+            this.$.ajax.generateRequest();
         },
         ready: function() {
             if (this.required === "true") {
                 this.$.main.setAttribute("required", true);
             }
-            
-            
+
+            if (!this.whorequire || !this.whorequire.length) {
+                this.$.ajax.generateRequest()
+            }
+
             var option = this.$.option;
             this.self = this.$.main;
-            this.self.setValue = function (val){
+            this.self.setValue = function(val) {
                 option.selected = val;
             };
         }
-       
+
     });
 
 </script>

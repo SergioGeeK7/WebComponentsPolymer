@@ -63,7 +63,7 @@
                 </template>
 
                 <template is="dom-if" if="[[element.isSelect]]">
-                    <opa-select fill="[[element.fill]]" name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" selected="{{element.identity.value}}" paramss="[[_onSelectChange(element.*)]]" whorequire="[[element.whoRequire]]" id="[[element.name]]" class="opa-element">
+                    <opa-select fill="[[element.fill]]" name="[[element.name]]" label="[[element.label]]" required="[[element.require]]" selected="{{element.identity.value}}" paramss="[[_onSelectChange(element.*)]]" whorequire="[[element.whoRequire]]" id="[[element.name]]" class="opa-element" on-click="__onSelectClick">
                     </opa-select>
                 </template>
 
@@ -211,13 +211,11 @@ _render
 
             var elementChanged = hasChanged.base.name;
             var selects = [].slice.call(this.querySelectorAll("opa-select"));
+            var self = this;
 
             selects.forEach(function(select) {
 
-                var noRequired = !select.whorequire || !select.whorequire.some((item) => {
-                    item.name === elementChanged && typeof item.value !== "undefined"
-                });
-                if (noRequired)
+                if (!select.whorequire || !select.whorequire.some((item) => item.name === elementChanged))
                     return;
 
                 var queryString = select.whorequire.reduce(function(obj, item) {
@@ -225,12 +223,15 @@ _render
                     return obj;
                 }, {});
 
-                // si hay dataedit no poner null
-                select.selectedId = null;
+                if (!self.botonera.isFillProcess)
+                    select.selectedId = null;
 
                 select.params = queryString;
             });
 
+        },
+        __onSelectClick: function() {
+            this.botonera.isFillProcess = false;
         },
         ageHasChanged: function(item) {
             console.log(item);
@@ -267,7 +268,7 @@ _render
         fill: function(dataFill) {
 
             var keys;
-            this.botonera.isFill = true;
+            this.botonera.isFillProcess = true;
 
             if (!dataFill || !(keys = Object.keys(dataFill)).length)
                 return;
@@ -286,7 +287,7 @@ _render
                 this.campos[keys[key]].setValue && this.campos[keys[key]].setValue(dataFill[keys[key]]);
             }
 
-            this.botonera.isFill = false;
+
         }
     });
 
