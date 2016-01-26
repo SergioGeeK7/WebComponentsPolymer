@@ -12,33 +12,22 @@
     </script>
     <!-- Imports will go here -->
     <link rel="import" href="www/lib/Opa-Framework/opa-form.html">
+    <link rel="import" href="www/lib/Opa-Framework/opa-table.html">
 
 </head>
 
 <body unresolved>
 
+
     <opa-form action="http://192.168.20.7:4000/public/api/debug" structure="http://192.168.20.7:4000/public/api/opaframework">
+
     </opa-form>
 
 
-    <button onclick="fill()">Llenar</button>
+    <opa-table exclude="" url="http://192.168.20.7:4000/public/api/getAsociados">
 
-    <script src="../editModeExample.js"></script>
-    <script>
-        function fill() {
-            var form = document.querySelector("opa-form");
-            form.fill(dataEdit);
-        }
+    </opa-table>
 
-        document.querySelector("opa-form").addEventListener("onFormLoad", function() {
-
-            this.campos["lastname"].addEventListener("click", function() {
-                alert("click");
-            });
-
-        });
-
-    </script>
 
 </body>
 

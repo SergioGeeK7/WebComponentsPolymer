@@ -1,0 +1,133 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-datatable/paper-datatable.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<!--<link rel="import" href="www/lib/paper-datatable/paper-datatable-column.html">-->
+<link rel="import" href="../paper-datatable/paper-datatable-card.html">
+
+
+<!-- Defines element markup -->
+<dom-module id="opa-table">
+
+
+    <style>
+
+
+    </style>
+
+    <template>
+
+        <iron-ajax id="ajax" url="[[url]]">
+        </iron-ajax>
+
+
+
+        <paper-datatable-card selectable data-source="{{datasource}}" id-property="nro" id="datatableCard" page-size="5">
+
+            <div toolbar-main>
+                <paper-input value="{{search}}" on-input="__search">
+                    <paper-icon-button icon="search" on-tap="__search"></paper-icon-button>
+            </div>
+
+            <paper-datatable selectable selected-item="{{selected}}" id="datatable">
+
+                <template is="dom-repeat" items="{{headers}}">
+
+                    <paper-datatable-column header="{{item}}" property="{{item}}" sortable>
+                    </paper-datatable-column>
+
+                </template>
+
+            </paper-datatable>
+
+        </paper-datatable-card>
+
+    </template>
+
+    <!-- Registers custom element -->
+    <script>
+        Polymer({
+            is: 'opa-table',
+            // Fires when an instance of the element is created
+            created: function() {},
+            properties: {
+                selected: {
+                    type: Object,
+                    observer: "onItemChange"
+                },
+                exclude: String,
+                url: String
+            },
+            onItemChange: function(newVal) {
+
+
+                this.fire("onItemChange", newVal);
+                var form = document.querySelector("opa-form");
+                form && form.fill(newVal);
+                return newVal;
+            },
+            // Fires when the local DOM has been fully prepared
+            ready: function() {
+
+                var self = this;
+
+                this.datasource = {
+                    get: function(sort, page, pageSize) {
+
+                        var ajax = self.$.ajax;
+                        ajax.params = {
+                            page: page,
+                            size: pageSize,
+                            name: self.search,
+                            ordenar: sort.direction,
+                            ordenarPor: sort.property,
+                        };
+
+                        return ajax.generateRequest()
+                            .completes
+                            .then(function(request) {
+                                var response = request.response;
+
+
+                                if (response[0][0] && response[0][0].pages) {
+                                    self.set("datasource.length", response[0][0].pages);
+                                }
+
+                                if (!self.headers) {
+                                    self.__setHeaders(response[0][0]);
+                                }
+
+                                return response[0];
+                            });
+                    },
+                    set: function(id, property, value) {},
+                    length: 1000
+                };
+
+            },
+            // Fires when the element was inserted into the document
+            attached: function() {},
+
+            // Fires when the element was removed from the document
+            detached: function() {},
+
+            // Fires when an attribute was added, removed, or updated
+            attributeChanged: function(name, type) {},
+            __setHeaders: function(response) {
+
+                var headers = Object.keys(response);
+                var exclude = this.exclude.split(",");
+                headers = headers.filter(function(item) {
+                    return exclude.indexOf(item) === -1;
+                });
+                headers.splice(headers.indexOf("id"), 1);
+                headers.splice(headers.indexOf("pages"), 1);
+                this.headers = headers;
+            },
+            __search: function() {
+                this.$.datatableCard.retrieveVisibleData();
+            }
+
+        });
+
+    </script>
+</dom-module>

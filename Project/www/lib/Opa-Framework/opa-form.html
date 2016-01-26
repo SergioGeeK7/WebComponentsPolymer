@@ -2,10 +2,10 @@
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-form/iron-form.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
-<link rel="import" href="opa-form-components/opa-input.html">
-<link rel="import" href="opa-form-components/opa-checkbox.html">
-<link rel="import" href="opa-form-components/opa-select.html">
-<link rel="import" href="opa-form-components/opa-button.html">
+<link rel="import" href="opa-input.html">
+<link rel="import" href="opa-checkbox.html">
+<link rel="import" href="opa-select.html">
+<link rel="import" href="opa-button.html">
 
 <dom-module id="opa-form">
 
@@ -215,7 +215,10 @@ _render
 
             selects.forEach(function(select) {
 
-                if (!select.whorequire || !select.whorequire.some((item) => item.name === elementChanged))
+
+                var noRequired = !select.whorequire || !select.whorequire.some((item) => item.name === elementChanged);
+
+                if (noRequired)
                     return;
 
                 var queryString = select.whorequire.reduce(function(obj, item) {
@@ -267,26 +270,19 @@ _render
         },
         fill: function(dataFill) {
 
-            var keys;
-            this.botonera.isFillProcess = true;
-
-            if (!dataFill || !(keys = Object.keys(dataFill)).length)
+            if (!dataFill)
                 return;
-
+            
+            this.botonera.isFillProcess = true;
             this.botonera.setEditMode(dataFill.id);
 
-            for (var key = 0, length = keys.length; key < length; key++) {
-
-                if (keys[key] === "id") {
-                    continue;
-                }
-
-                this.campos[keys[key]].value = dataFill[keys[key]];
-                this.campos[keys[key]].selected = dataFill[keys[key]];
-                this.campos[keys[key]].checked = dataFill[keys[key]];
-                this.campos[keys[key]].setValue && this.campos[keys[key]].setValue(dataFill[keys[key]]);
+            for (var i in this.campos){
+                
+                this.campos[i].value = dataFill[i];
+                this.campos[i].selected = dataFill[i];
+                this.campos[i].checked = dataFill[i];
+                this.campos[i].setValue && this.campos[i].setValue(dataFill[i]);
             }
-
 
         }
     });

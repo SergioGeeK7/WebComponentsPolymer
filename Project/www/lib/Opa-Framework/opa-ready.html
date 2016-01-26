@@ -1,0 +1,40 @@
+<link rel="import" href="../polymer/polymer.html">
+
+
+
+<dom-module id="opa-ready">
+
+    <template>
+        <style></style>
+        
+        <h1 hidden>Ready !</h1>
+
+    </template>
+
+</dom-module>
+
+<script>
+    Polymer({
+        is: 'opa-checkbox',
+        properties: {
+            name: String,
+            required: {
+                value: "false",
+                type: String
+            },
+            label: String,
+            checked:{
+                type:Boolean,
+                notify:true
+            }
+        },
+        ready: function() {
+            this.fire("ready");
+        },
+        created: function() {
+            
+        },
+        
+    });
+
+</script>
