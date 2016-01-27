@@ -1,0 +1,48 @@
+<!-- Imports polymer -->
+<link rel="import" href="www/lib/polymer/polymer.html">
+<link rel="import" href="www/lib/paper-button/paper-button.html">    
+<link rel="import" href="www/lib/paper-input/paper-input.html">    
+<!-- Defines element markup -->
+<dom-module id="my-element">
+    <template>
+        
+        
+        
+        
+        <paper-input on-input="oe" value="{{myValue}}"></paper-input>
+        <paper-button>Entrar</paper-button>
+        
+        
+    </template>
+    
+    <!-- Registers custom element -->
+    <script>
+    Polymer({
+        is: 'my-element',
+    
+        // Fires when an instance of the element is created
+        created: function() {},
+        oe:function (e){
+          if(this.myValue === "sergio"){
+              this.fire("theForbidden",{output:"Welcome !!!"});
+          }
+        },
+    
+        // Fires when the local DOM has been fully prepared
+        ready: function() {
+            console.log("oe");
+            //setTimeout(()=>this.fire("readyy"),10);
+            this.fire("readyy");
+        },
+    
+        // Fires when the element was inserted into the document
+        attached: function() {},
+    
+        // Fires when the element was removed from the document
+        detached: function() {},
+    
+        // Fires when an attribute was added, removed, or updated
+        attributeChanged: function(name, type) {}
+    });
+    </script>
+</dom-module>

@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <script src="www/lib/webcomponentsjs/webcomponents.js"></script>
-    <link rel="import" href="opa-table.html">
+    <link rel="import" href="www/lib/paper-button/paper-button.html">
+    <link rel="import" href="www/lib/paper-input/paper-input.html">
+    <link rel="import" href="MyCurstomElement.html">
 </head>
 
 <script>
@@ -17,10 +19,28 @@
 <body>
 
 
-    <opa-table>
 
-    </opa-table>
+    
 
+    <my-element></my-element>
+
+
+<paper-button>Entrar 2</paper-button>
+<paper-input></paper-input>
+
+
+    <script>
+        document.querySelector("my-element").addEventListener("theForbidden", handler);
+        document.querySelector("my-element").addEventListener("readyy", handler2);
+
+
+        function handler(e) {
+            alert("Yes , he is !!! "+e.detail.output);
+        }
+        function handler2(e) {
+            alert("Yes !!!");
+        }
+    </script>
 
 </body>
 
