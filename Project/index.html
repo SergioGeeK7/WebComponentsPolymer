@@ -13,6 +13,18 @@
     <!-- Imports will go here -->
     <link rel="import" href="www/lib/Opa-Framework/opa-form.html">
     <link rel="import" href="www/lib/Opa-Framework/opa-table.html">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            document.querySelector("opa-form").addEventListener("ready", ready)
+
+            function ready() {
+                console.log(this.campos);
+            }
+        });
+    </script>
+
+
 
 </head>
 
@@ -20,9 +32,7 @@
 
 
     <opa-form action="http://192.168.20.7:4000/public/api/debug" structure="http://192.168.20.7:4000/public/api/opaframework">
-
     </opa-form>
-
 
     <opa-table exclude="" url="http://192.168.20.7:4000/public/api/getAsociados">
 
