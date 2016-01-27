@@ -14,7 +14,8 @@
             paper-button {
                 color: #fff;
                 margin: 10px;
-                width: 100%;
+                width: 0;
+                flex: 1;
                 text-transform: capitalize;
             }
             
@@ -37,6 +38,13 @@
             }
             
             .botonera {
+                display: flex;
+                -webkit-box-flex: 1;
+                -webkit-flex: 1;
+                -moz-box-flex: 1;
+                -moz-flex: 1;
+                -ms-flex: 1;
+                flex: 1;
                 width: 100%;
             }
             
@@ -73,24 +81,20 @@
 
             </template>
 
-            <div>
+            <div class="botonera">
 
-                <div class="botonera">
+                <paper-button class="save" on-click="_save">
+                    Guardar
+                </paper-button>
 
-                    <paper-button class="save" on-click="_save">
-                        Guardar
-                    </paper-button>
+                <paper-button class="wipe" on-click="wipe">
+                    <span hidden$="{{botonera.states.create}}">Cancelar</span>
+                    <span hidden$="{{!botonera.states.create}}">Limpiar</span>
+                </paper-button>
 
-                    <paper-button class="wipe" on-click="wipe">
-                        <span hidden$="{{botonera.states.create}}">Cancelar</span>
-                        <span hidden$="{{!botonera.states.create}}">Limpiar</span>
-                    </paper-button>
-
-                    <paper-button class="delete" disabled$="{{!botonera.states.edit}}" on-click="_delete">
-                        Eliminar
-                    </paper-button>
-
-                </div>
+                <paper-button class="delete" disabled$="{{!botonera.states.edit}}" on-click="_delete">
+                    Eliminar
+                </paper-button>
 
             </div>
         </form>
@@ -272,12 +276,12 @@ _render
 
             if (!dataFill)
                 return;
-            
+
             this.botonera.isFillProcess = true;
             this.botonera.setEditMode(dataFill.id);
 
-            for (var i in this.campos){
-                
+            for (var i in this.campos) {
+
                 this.campos[i].value = dataFill[i];
                 this.campos[i].selected = dataFill[i];
                 this.campos[i].checked = dataFill[i];
